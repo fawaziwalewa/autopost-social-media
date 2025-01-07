@@ -35,6 +35,7 @@ This web application is a **social media automation tool** built using **Laravel
 ## **Installation**
 
 ### **1. Clone the Repository**
+
 ```bash
 git clone https://github.com/fawaziwalewa/autopost-social-media.git
 cd autopost-social-media
