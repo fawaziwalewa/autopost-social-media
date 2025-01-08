@@ -15,7 +15,7 @@ class StatsOverview extends BaseWidget
         $totalPosts = Post::count();
         $timezone = env('APP_TIMEZONE') ?? config('app.timezone');
         $publishedPosts = Post::where('is_posted', true)->count();
-        $scheduledPosts = Post::where('published_at', '>', now($timezone))->count();
+        $scheduledPosts = Post::where('is_posted', false)->count();
         $newPostsThisMonth = Post::whereMonth('created_at', now($timezone)->month)->count();
 
         return [
