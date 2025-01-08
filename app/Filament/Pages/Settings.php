@@ -43,7 +43,7 @@ class Settings extends Page
         return $form
             ->schema([
                 Forms\Components\Section::make('Twitter API Credentials')
-                    ->description(new HtmlString('Visit the <a href="https://developer.x.com/en/portal/dashboard" target="_blank" class="text-blue-500">Twitter Developer Portal</a> to create a new app and get your API credentials.'))
+                    ->description(new HtmlString('Visit the <a href="https://developer.x.com/en/portal/dashboard" target="_blank" style="color:#3b82f6">Twitter Developer Portal</a> to create a new app and get your API credentials.'))
                     ->schema([
                         Forms\Components\TextInput::make('twitter_account_id')
                             ->label('Account ID')
@@ -80,19 +80,19 @@ class Settings extends Page
         return $form
             ->schema([
                 Forms\Components\Section::make('Facebook API Credentials')
-                    ->description(new HtmlString('Visit the <a href="https://developers.facebook.com/apps" target="_blank" class="text-blue-500">Facebook for Developers</a> to create a new app and get your API credentials.'))
+                    ->description(new HtmlString('Visit the <a href="https://developers.facebook.com/apps" target="_blank" style="color:#3b82f6">Facebook for Developers</a> to create a new app and get your API credentials.'))
                     ->schema([
                         Forms\Components\TextInput::make('facebook_app_id')
                             ->label('App ID')
-                            ->placeholder('Add an app ID e.g 2428070484192274')
+                            ->placeholder('Add an app ID e.g 2428070484192111')
                             ->required(),
                         Forms\Components\TextInput::make('facebook_page_id')
                             ->label('Page ID')
-                            ->placeholder('Add a page ID e.g 289905724212159')
+                            ->placeholder('Add a page ID e.g 289905724212122')
                             ->required(),
                         Forms\Components\TextInput::make('facebook_app_secret')
                             ->label('App Secret')
-                            ->placeholder('Add an app secret e.g 96b8b62b106c13ea890f758c82e2e5b4')
+                            ->placeholder('Add an app secret e.g 96b8b62b106c13ea890r958c82e2ettb4')
                             ->required(),
                         Forms\Components\Select::make('facebook_default_graph_version')
                             ->label('Default Graph Version')
@@ -103,8 +103,8 @@ class Settings extends Page
                             ->required(),
                         Forms\Components\TextInput::make('facebook_access_token')
                             ->label('Access Token')
-                            ->placeholder('Add an access token e.g EAAigUTazLBIBOxBqOFhPxojRminhYZBLvevcwaKgmyhn3XYFQ6bRoOD6066yMmK4UJOTUY86YuyFiCsaPnWaZAGBffpypbqCjhDBZA0xZAcIdbMgA7lnIZCj0QVfuIqRLMZB0IcdmKy3ea2mUITypv5r3RZCr0LAJFEralVqCJiPKLycCX6iTZBWilAmqq46IT3k8mIYQgRTE1p7U4qNTwcnKXkkqdZBJn9ehtQZDZD')
-                            ->hint(new HtmlString('You can generate an access token from the <a href="https://developers.facebook.com/tools/explorer" target="_blank" class="text-blue-500">Graph API Explorer</a>.')),
+                            ->placeholder('Add an access token e.g EAAigUTazLBIBOxBqOFhPxoyyminhYZBLvevcwaKgmyhn3XYFQ6bRoOD6066yMmK4UJOTUY86YuyFiCsaPnWaZAGBffpypbqCjhDBZA0xZAcIdbMgA7lnIZCj0QVfuIqRLMZB0IcdmKy3ea2mUITypv5r3RZCr0LAJFEralVqCJiPKLycCX6iTZBWilAmqq46IT3k8mIYQgRTE1p7U4qNTwcnKXkkqdZBJn9ehtQZDZD')
+                            ->hint(new HtmlString('You can generate an access token from the <a href="https://developers.facebook.com/tools/explorer" target="_blank" style="color:#3b82f6">Graph API Explorer</a>.')),
                         Forms\Components\Toggle::make('facebook_autopost')
                             ->label('Enable Auto-post')
                             ->hint('Enable or disable auto-post to Facebook.')

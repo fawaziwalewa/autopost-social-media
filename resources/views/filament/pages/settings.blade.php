@@ -1,6 +1,4 @@
 <div>
-    @vite('resources/css/app.css')
-
     <x-filament-panels::page x-data="{ activeTab: 'twitter' }">
         <x-filament::tabs>
             {{-- Twitter (x.com) --}}
