@@ -93,18 +93,18 @@ Set up the database schema:
 php artisan migrate
 ```
 
-### **5. Create an Admin User**
+### **5. Generate the Application Key**
+
+```bash
+php artisan key:generate
+```
+
+### **6. Create an Admin User**
 
 You can create a new user account with the following command:
 
 ```bash
 php artisan make:filament-user
-```
-
-### **6. Generate the Application Key**
-
-```bash
-php artisan key:generate
 ```
 
 ### **7. Start the Application**
