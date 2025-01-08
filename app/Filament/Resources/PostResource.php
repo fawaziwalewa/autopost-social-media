@@ -97,7 +97,11 @@ class PostResource extends Resource
                     }),
                 Tables\Columns\ImageColumn::make('image'),
                 Tables\Columns\TextColumn::make('site_url')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\BooleanColumn::make('is_posted'),
+                Tables\Columns\BooleanColumn::make('is_posted_to_twitter'),
+                Tables\Columns\BooleanColumn::make('is_posted_to_facebook'),
                 Tables\Columns\TextColumn::make('published_at')
                     ->dateTime('F j, Y g:i A')
                     ->sortable(),

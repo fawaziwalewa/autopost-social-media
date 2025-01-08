@@ -14,9 +14,12 @@ class StatsOverview extends BaseWidget
     {
         $totalPosts = Post::count();
         $timezone = env('APP_TIMEZONE') ?? config('app.timezone');
-        $publishedPosts = Post::where('is_posted', true)->count();
-        $scheduledPosts = Post::where('is_posted', false)->count();
         $newPostsThisMonth = Post::whereMonth('created_at', now($timezone)->month)->count();
+        $publishedPostsTwitter = Post::where('is_posted_to_twitter', true)->count();
+        $scheduledPostsTwitter = Post::where('is_posted_to_twitter', false)->count();
+        $publishedPostsFacebook = Post::where('is_posted_to_facebook', true)->count();
+        $scheduledPostsFacebook = Post::where('is_posted_to_facebook', false)->count();
+
 
         return [
             Stat::make('Total Posts', $totalPosts)
@@ -25,16 +28,28 @@ class StatsOverview extends BaseWidget
                 ->color('success')
                 ->chart([7, 2, 10, 3, 15, 4, 17]),
 
-            Stat::make('Published Posts', $publishedPosts)
-                ->description('Posts published so far')
+            Stat::make('Published Posts to Twitter', $publishedPostsTwitter)
+                ->description('Posts published to Twitter')
                 ->descriptionIcon('heroicon-m-check-badge')
-                ->color('success')
+                ->color('dark')
                 ->chart([7, 2, 10, 3, 15, 4, 17]),
 
-            Stat::make('Scheduled Posts', $scheduledPosts)
-                ->description('Posts awaiting publication')
-                ->descriptionIcon('heroicon-m-calendar-days')
-                ->color('primary')
+            Stat::make('Scheduled Posts to Twitter', $scheduledPostsTwitter)
+                ->description('Posts scheduled to Twitter')
+                ->descriptionIcon('heroicon-m-clock')
+                ->color('warning')
+                ->chart([7, 2, 10, 3, 15, 4, 17]),
+
+            Stat::make('Published Posts to Facebook', $publishedPostsFacebook)
+                ->description('Posts published to Facebook')
+                ->descriptionIcon('heroicon-m-check-badge')
+                ->color('info')
+                ->chart([7, 2, 10, 3, 15, 4, 17]),
+
+            Stat::make('Scheduled Posts to Facebook', $scheduledPostsFacebook)
+                ->description('Posts scheduled to Facebook')
+                ->descriptionIcon('heroicon-m-clock')
+                ->color('warning')
                 ->chart([7, 2, 10, 3, 15, 4, 17]),
         ];
     }

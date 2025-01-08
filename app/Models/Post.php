@@ -14,6 +14,8 @@ class Post extends Model
         'image',
         'site_url',
         'is_posted',
+        'is_posted_to_twitter',
+        'is_posted_to_facebook',
         'published_at'
     ];
 }

@@ -33,7 +33,10 @@ class AutoPostToSocialMedia extends Command
     {
         $timezone = env('APP_TIMEZONE') ?? config('app.timezone');
         $scheduledPosts = Post::where('published_at', '<=', now($timezone))
-            ->where('is_posted', false)
+            ->where(function ($query) {
+                $query->where('is_posted_to_twitter', false)
+                    ->orWhere('is_posted_to_facebook', false);
+            })
             ->get();
 
         $twitterAutoPost = Setting::where('option_name', 'twitter_auto_post')->first();
@@ -43,19 +46,12 @@ class AutoPostToSocialMedia extends Command
 
         try {
             foreach ($scheduledPosts as $post) {
-                $isTwitterPosted = false;
-                $isFacebookPosted = false;
-
-                // Format description with tags
-                $tags = $post->tags->pluck('name')->map(function ($tag) {
-                    return "#$tag"; // Prepend each tag with '#'
-                })->implode(' ');
-
+                $tags = $post->tags->pluck('name')->map(fn($tag) => "#$tag")->implode(' ');
                 $siteUrl = env('APP_URL');
                 $description = "{$post->description}\n\n{$siteUrl}\n\n{$tags}";
 
-                // Post to Twitter
-                if (($twitterAutoPost && $twitterAutoPost->option_value) || env('TWITTER_AUTO_POST')) {
+                // Twitter Posting
+                if (!$post->is_posted_to_twitter && ($twitterAutoPost->option_value ?? env('TWITTER_AUTO_POST'))) {
                     try {
                         $twitterClient = app(Client::class);
                         $tweetData = ['text' => $description];
@@ -64,24 +60,21 @@ class AutoPostToSocialMedia extends Command
                             $fileUrl = url("storage/$post->image");
                             $fileData = base64_encode(file_get_contents($fileUrl));
                             $mediaInfo = $twitterClient->uploadMedia()->upload($fileData);
-
                             $tweetData['media'] = [
-                                'media_ids' => [
-                                    (string) $mediaInfo["media_id"],
-                                ],
+                                'media_ids' => [(string) $mediaInfo["media_id"]],
                             ];
                         }
 
-                        $twitterClient->tweet()->create()->performRequest($tweetData);
-                        $isTwitterPosted = true;
+                        $response = $twitterClient->tweet()->create()->performRequest($tweetData);
+                        Log::info("Twitter response: " . json_encode($response));
+                        $post->is_posted_to_twitter = true;
                     } catch (\Exception $e) {
                         Log::error("Error posting Post ID {$post->id} to Twitter: " . $e->getMessage());
                     }
                 }
 
-
-                // Post to Facebook
-                if (($facebookAutoPost && $facebookAutoPost->option_value) || env('FACEBOOK_AUTO_POST')) {
+                // Facebook Posting
+                if (!$post->is_posted_to_facebook && ($facebookAutoPost->option_value ?? env('FACEBOOK_AUTO_POST'))) {
                     $accessToken = app('facebook.access_token');
                     $facebook = app(\Facebook\Facebook::class);
                     $pageID = Setting::where('option_name', 'facebook_page_id')->first()->option_value ?? env('FACEBOOK_PAGE_ID');
@@ -97,31 +90,34 @@ class AutoPostToSocialMedia extends Command
                             $response = $facebook->post("/$pageID/feed", $data, $accessToken);
                         }
 
-                        Log::info("Facebook response: " . json_encode($response->getGraphNode()));
-
-                        $isFacebookPosted = true;
+                        Log::info("Facebook response: " . json_encode($response));
+                        $post->is_posted_to_facebook = true;
                     } catch (\Exception $e) {
                         Log::error("Error posting Post ID {$post->id} to Facebook: " . $e->getMessage());
                     }
                 }
 
-                // Mark post as posted only if successfully posted to both platforms
-                if ($isTwitterPosted && $isFacebookPosted) {
+                // Save the updated post status
+                $post->save();
+
+                // Flag successful posts
+                if ($post->is_posted_to_twitter || $post->is_posted_to_facebook) {
+                    $isAnyPostSuccessful = true;
+                    Log::info("Post ID: {$post->id} status updated for Twitter/Facebook.");
+                }
+
+                if ($post->is_posted_to_twitter && $post->is_posted_to_facebook) {
                     $post->is_posted = true;
                     $post->save();
-
-                    $isAnyPostSuccessful = true;
-
-                    $this->info("Post ID: {$post->id} successfully posted to Twitter and Facebook.");
-                    Log::info("Post ID: {$post->id} successfully posted to Twitter and Facebook.");
+                    Log::info("Post ID: {$post->id} status updated for both Twitter and Facebook.");
                 }
             }
 
             if ($isAnyPostSuccessful) {
                 foreach ($users as $user) {
                     Notification::make()
-                        ->title('Scheduled posts successfully posted to social media')
-                        ->body('All scheduled posts have been successfully posted to Twitter and Facebook.')
+                        ->title('Scheduled posts successfully posted')
+                        ->body('Some or all scheduled posts were successfully posted to social media.')
                         ->success()
                         ->sendToDatabase($user);
                 }
@@ -132,11 +128,10 @@ class AutoPostToSocialMedia extends Command
             foreach ($users as $user) {
                 Notification::make()
                     ->title('Error posting to social media')
-                    ->body('An error occurred while posting to social media. Please check the logs for more information.')
+                    ->body('An error occurred while posting to social media. Please check the logs.')
                     ->danger()
                     ->sendToDatabase($user);
             }
         }
     }
-
 }
