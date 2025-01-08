@@ -101,7 +101,13 @@ You can create a new user account with the following command:
 php artisan make:filament-user
 ```
 
-### **6. Start the Application**
+### **6. Generate the Application Key**
+
+```bash
+php artisan key:generate
+```
+
+### **7. Start the Application**
 
 Run the development server:
 
