@@ -55,7 +55,7 @@ class AutoPostToSocialMedia extends Command
                 $description = "{$post->description}\n\n{$siteUrl}\n\n{$tags}";
 
                 // Post to Twitter
-                if ($twitterAutoPost && $twitterAutoPost->option_value || env('TWITTER_AUTO_POST')) {
+                if (($twitterAutoPost && $twitterAutoPost->option_value) || env('TWITTER_AUTO_POST')) {
                     try {
                         $twitterClient = app(Client::class);
                         $tweetData = ['text' => $description];
@@ -81,7 +81,7 @@ class AutoPostToSocialMedia extends Command
 
 
                 // Post to Facebook
-                if ($facebookAutoPost && $facebookAutoPost->option_value || env('FACEBOOK_AUTO_POST')) {
+                if (($facebookAutoPost && $facebookAutoPost->option_value) || env('FACEBOOK_AUTO_POST')) {
                     $accessToken = app('facebook.access_token');
                     $facebook = app(\Facebook\Facebook::class);
                     $pageID = Setting::where('option_name', 'facebook_page_id')->first()->option_value ?? env('FACEBOOK_PAGE_ID');
