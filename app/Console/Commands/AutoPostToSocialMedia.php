@@ -99,7 +99,7 @@ class AutoPostToSocialMedia extends Command
 
                         Log::info("Facebook response: " . json_encode($response->getGraphNode()));
 
-                        $isFacebookPosted = !empty($response->getGraphNode()['id']);
+                        $isFacebookPosted = true;
                     } catch (\Exception $e) {
                         Log::error("Error posting Post ID {$post->id} to Facebook: " . $e->getMessage());
                     }
