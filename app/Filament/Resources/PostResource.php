@@ -38,7 +38,7 @@ class PostResource extends Resource
                             ->placeholder('Add a tag')
                             ->nestedRecursiveRules([
                                 'min:3',
-                                'max:15',
+                                'max:50',
                             ])
                             ->reactive()
                             ->rule(function ($get) {
