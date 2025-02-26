@@ -39,8 +39,8 @@ class AutoPostToSocialMedia extends Command
             })
             ->get();
 
-        $twitterAutoPost = Setting::where('option_name', 'twitter_auto_post')->first();
-        $facebookAutoPost = Setting::where('option_name', 'facebook_auto_post')->first();
+        $twitterAutoPost = Setting::where('option_name', 'twitter_autopost')->first();
+        $facebookAutoPost = Setting::where('option_name', 'facebook_autopost')->first();
         $users = User::all();
         $isAnyPostSuccessful = false;
 
