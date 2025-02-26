@@ -47,7 +47,7 @@ class AutoPostToSocialMedia extends Command
         try {
             foreach ($scheduledPosts as $post) {
                 $tags = $post->tags->pluck('name')->map(fn($tag) => "#$tag")->implode(' ');
-                $siteUrl = env('APP_URL');
+                $siteUrl = 'https://tiptopacademy.org/';
                 $description = "{$post->description}\n\n{$siteUrl}\n\n{$tags}";
 
                 // Twitter Posting
