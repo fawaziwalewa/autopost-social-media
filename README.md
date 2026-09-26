@@ -209,5 +209,5 @@ For questions or support, please contact:
 
 - **Email**: <fawaziwalewa@gmail.com>
 - **GitHub**: [fawaziwalewa](https://github.com/fawaziwalewa)
-- **Twitter**: [@IwalewaFawaz](https://twitter.com/IwalewaFawaz)
+- **Twitter**: [@iwalewa_fawaz](https://x.com/iwalewa_fawaz)
 - **LinkedIn**: [Fawaz Iwalewa](https://www.linkedin.com/in/fawaz-iwalewa)
